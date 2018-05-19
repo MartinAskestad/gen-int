@@ -1,3 +1,4 @@
+import minimist from "minimist";
 import { get } from "request-promise-native";
 import {
   EmitHint,
@@ -17,7 +18,6 @@ import {
 } from "typescript";
 import fs = require("fs");
 
-const url = `http://petstore.swagger.io/v2/swagger.json`;
 const exportToken = createToken(SyntaxKind.ExportKeyword);
 
 export function saveInterfaces(interfaces) {
@@ -101,6 +101,8 @@ export function parseDefinitions({ definitions }) {
 }
 
 (async function() {
+  // const url = `http://petstore.swagger.io/v2/swagger.json`;
+  const url = minimist(process.argv.slice(2))._[0];
   const result = await get(url, { json: true });
   const swaggerJson = await result;
   parseDefinitions(swaggerJson);

@@ -10,12 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "minimist": "^1.2.0",
     "request": "^2.86.0",
     "request-promise-native": "^1.0.5",
     "ts-node": "^6.0.3",
     "typescript": "^2.8.3"
   },
   "devDependencies": {
+    "@types/minimist": "^1.2.0",
     "@types/request": "^2.47.0",
     "@types/request-promise-native": "^1.0.14",
     "nodemon": "^1.17.4"
