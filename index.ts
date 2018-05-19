@@ -15,6 +15,7 @@ import {
   createToken,
   createTypeReferenceNode
 } from "typescript";
+import fs = require("fs");
 
 const url = `http://petstore.swagger.io/v2/swagger.json`;
 const exportToken = createToken(SyntaxKind.ExportKeyword);
@@ -22,7 +23,7 @@ const exportToken = createToken(SyntaxKind.ExportKeyword);
 export function saveInterfaces(interfaces) {
   const resultfile = createSourceFile(
     "temp.ts",
-    "",
+    "// Martin was here",
     ScriptTarget.Latest,
     false,
     ScriptKind.TS
@@ -31,11 +32,15 @@ export function saveInterfaces(interfaces) {
     newLine: NewLineKind.LineFeed
   });
 
-  interfaces.forEach(intf => {
-    const result = printer.printNode(EmitHint.Unspecified, intf, resultfile);
-    console.log(result);
-  });
+  const ts = interfaces
+    .map(intf => {
+      printer.printNode(EmitHint.Unspecified, intf, resultfile);
+      return printer.printNode(EmitHint.Unspecified, intf, resultfile);
+    })
+    .join("\n");
+  const res = fs.writeFileSync("models.ts", ts);
 }
+
 export function getDataType(property) {
   if (typeof property["$ref"] !== "undefined") {
     const typename = (<string>property["$ref"]).replace("#/definitions/", "");
@@ -72,6 +77,7 @@ export function createPropertySignatures(definition) {
     );
   });
 }
+
 export function createInterfaceFromDefinition(name: string, definition: any) {
   const identifier = createIdentifier(name);
   const properties = createPropertySignatures(definition);
@@ -93,6 +99,7 @@ export function parseDefinitions({ definitions }) {
 
   saveInterfaces(interfaces);
 }
+
 (async function() {
   const result = await get(url, { json: true });
   const swaggerJson = await result;
