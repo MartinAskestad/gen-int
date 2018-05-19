@@ -1,0 +1,13 @@
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+/.vscode
+
+# misc
+npm-debug.log
+/typings
+
+#System Files
+.DS_Store
